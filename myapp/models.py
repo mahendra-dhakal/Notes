@@ -11,7 +11,7 @@ class Note(models.Model):
     description=models.TextField()
     date_created=models.DateField(auto_now_add=True)
     notecategory=models.ForeignKey(NoteCategory, on_delete=models.SET_NULL, null=True)
-    user=models.ForeignKey(User, on_delete=models.SET_NULL,null=True)
+    user=models.ForeignKey(User, on_delete=models.CASCADE,null=True)
     
 
 
