@@ -5,7 +5,7 @@ from .models import Note, NoteCategory
 # Create your views here.
 
 def home(request):
-    note_obj=Note.objects.all()
+    note_obj=Note.objects.all() 
     data={'notes':note_obj}
     return render(request, 'index.html', context=data)
 

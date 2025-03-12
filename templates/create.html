@@ -13,24 +13,26 @@
 </head>
 
 <body>
-    <form>
+    <form method="post">
+        {% csrf_token %}
         <div class="mb-3">
             <label for="name1" class="form-label">Name:</label>
-            <input type="text" class="form-control" id="name1" aria-describedby="emailHelp" required>
+            <input type="text" name="name" class="form-control" id="name1" aria-describedby="emailHelp" required>
         </div>
         <div class="mb-3">
-            <label for="description1" class="form-label">Description:</label>
-            <textarea class="form-control" placeholder="Enter your description here." id="description1" required></textarea>
+            <label for="description1" name="description" class="form-label">Description:</label>
+            <textarea class="form-control" placeholder="Enter your description here." id="description1"
+                required></textarea>
         </div>
         <div class="mb-3">
             <label for="note_category" class="form-label">Select your NoteCategory:</label>
-            <select class="form-select" aria-label="Default select example" name="notescategory?" id="note_category">
+            <select class="form-select" aria-label="Default select example" name="category" id="note_category">
                 {% for i in notecategory%}
-                <option value="opt1">{{i.name}}</option>
+                <option value="{{i.id}}">{{i.name}}</option>
                 {%endfor%}
             </select>
-        </div> 
-            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
     </form>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
