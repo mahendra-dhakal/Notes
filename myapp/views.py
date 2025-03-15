@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from .models import Note, NoteCategory  
+from .forms import NoteCategoryForm
 
 # Create your views here.
 
@@ -14,7 +15,7 @@ def home(request):
     
 
 
-def create(request):
+def create_note(request):
     if request.method=='POST':
         name=request.POST.get('name')
         description=request.POST.get('description')
@@ -26,8 +27,16 @@ def create(request):
         
         Note.objects.create(name=name, description= description,notecategory=note_category_object)
         
-    
-    
     notecategory_obj=NoteCategory.objects.all()
     note_category={'notecategory':notecategory_obj}
-    return render(request,'create.html',context=note_category)
+    return render(request,'create_note.html',context=note_category)
+
+def create_note_category(request):
+    if request.method=='POST':
+        form=NoteCategoryForm(request.POST)
+        if form.is_valid():
+            form.save()
+    
+    note_category_form=NoteCategoryForm()
+    data={'notecategory_form':note_category_form}
+    return render(request,'create_note_category.html',context=data)
