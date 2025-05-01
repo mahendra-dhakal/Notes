@@ -29,14 +29,15 @@
     <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
       <table class="table">
         <thead>
-            <h3><a href="{% url 'create-note'%}"><button class="btn btn-primary">Create Note</button></a></h3>
+          <h3><a href="{% url 'create-note'%}"><button class="btn btn-primary">Create Note</button></a></h3>
           <tr>
-            <th scope="col">ID</th>
-            <th scope="col">Name</th>
-            <th scope="col">Description</th>
-            <th scope="col">NotesCategory</th>
-            <th scope="col">Action</th>
+            <th scope="col" rowspan="2">ID</th>
+            <th scope="col" rowspan="2">Name</th>
+            <th scope="col" rowspan="2">Description</th>
+            <th scope="col" rowspan="2">NotesCategory</th>
+            <th scope="col" colspan="2" class="text-center">Action</th>
           </tr>
+
         </thead>
         <tbody>
           {% for i in notes %}
@@ -45,7 +46,17 @@
             <td>{{i.name}}</td>
             <td>{{i.description}}</td>
             <td>{{i.notecategory.name}}</td>
-            <td><a href="{% url 'edit-note' pk=i.id %}"><button type="submit" class="btn btn-warning">Edit</button></a></td>
+
+            <td>
+              <div class="d-flex justify-content-center gap-2"><a href="{% url 'edit-note' pk=i.id %}"><button
+                    type="submit" class="btn btn-warning">Edit</button></a>
+
+                <a href="{% url 'delete-note' pk=i.id %}"><button class="btn btn-danger">Delete</button></a>
+              </div>
+            </td>
+
+          </tr>
+
           </tr>
           {% endfor %}
         </tbody>
@@ -53,13 +64,14 @@
     </div>
     <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
       <table class="table">
-        <h3><a href="{% url 'create-note-category' %}"><button class="btn btn-primary">Create NoteCategory</button></a></h3>
+        <h3><a href="{% url 'create-note-category' %}"><button class="btn btn-primary">Create NoteCategory</button></a>
+        </h3>
 
         <thead>
           <tr>
-            <th scope="col">ID</th>
-            <th scope="col">Name</th>
-            <th scope="col">Action</th>
+            <th scope="col" rowspan="2">ID</th>
+            <th scope="col" rowspan="2">Name </th>
+            <th scope=" col" colspan="2" class="text-center">Action</th>
           </tr>
         </thead>
         <tbody>
@@ -67,7 +79,13 @@
           <tr>
             <th scope="row">{{i.id}}</th>
             <td>{{i.name}}</td>
-            <td><a href="{% url 'edit-note-category' pk=i.id %}"><button type="submit" class="btn btn-warning">Edit</button></a></td>
+            <td>
+              <div class="d-flex justify-content-center gap-2">
+                <a href="{% url 'edit-note-category' pk=i.id %}"><button type="submit"
+                    class="btn btn-warning">Edit</button></a>
+                <a href="{% url 'delete-notecategory' pk=i.id%}"><button class="btn btn-danger">Delete</button></a>
+              </div>
+            </td>
           </tr>
           {% endfor %}
         </tbody>

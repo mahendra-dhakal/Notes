@@ -85,4 +85,23 @@ def edit_note_category(request,pk):
     note_category_form=NoteCategoryForm(instance=note_category_obj)
     data={'notecategory':note_category_form}
     return render(request,'edit_notecategory.html',context=data)
+
+def delete_note_category(request,pk):
+    note_category_obj=NoteCategory.objects.get(id=pk)
+    
+    if request.method=='POST':
+        note_category_obj.delete()
+        return redirect('/')
+
+    return render(request,'delete.html')
+
+def delete_note(request,pk):
+    note_obj=Note.objects.get(id=pk)
+    if request.method=='POST':
+        note_obj.delete()
+        return redirect('/')
+    
+    return render(request,'delete.html')
+    
+    
     
