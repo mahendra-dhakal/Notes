@@ -97,11 +97,9 @@ def delete_note_category(request,pk):
 
 def delete_note(request,pk):
     note_obj=Note.objects.get(id=pk)
-    if request.method=='POST':
-        note_obj.delete()
-        return redirect('/')
+    note_obj.delete()
+    return redirect('/')
     
-    return render(request,'delete.html')
     
     
     

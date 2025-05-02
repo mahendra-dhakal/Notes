@@ -8,3 +8,6 @@ class NoteCategoryForm(forms.ModelForm):
         widgets={
             'name':forms.TextInput(attrs={'class':"form-control"})
         }
+
+class UserRegisterForm(forms.ModelForm):
+    pass
