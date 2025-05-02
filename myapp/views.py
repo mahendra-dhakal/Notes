@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .models import Note, NoteCategory  
-from .forms import NoteCategoryForm
+from .forms import NoteCategoryForm, UserRegisterForm
 
 # Create your views here.
 
@@ -99,6 +99,18 @@ def delete_note(request,pk):
     note_obj=Note.objects.get(id=pk)
     note_obj.delete()
     return redirect('/')
+
+def register_user(request):
+    
+    if request.method == 'POST':
+        form=UserRegisterForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('home')
+    
+    form=UserRegisterForm()
+    data={'form':form}
+    return render(request,'register.html',context=data)
     
     
     
