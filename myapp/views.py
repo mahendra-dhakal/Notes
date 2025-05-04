@@ -1,20 +1,25 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .models import Note, NoteCategory  
-from .forms import NoteCategoryForm, UserRegisterForm
+from .forms import NoteCategoryForm, UserForm
+from django.contrib.auth.hashers import make_password
+from django.contrib.auth import authenticate, login,logout
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
-
 def home(request):
-    note_obj=Note.objects.all().order_by('id')
-    note_category_obj= NoteCategory.objects.all().order_by('id')
-    
-    data={'notes':note_obj , 'note_categories':note_category_obj}
-    return render(request, 'index.html', context=data,)
+    if request.user.is_authenticated:
+        note_obj=Note.objects.all().order_by('id')
+        note_category_obj= NoteCategory.objects.all().order_by('id')
+        
+        data={'notes':note_obj , 'note_categories':note_category_obj}
+        return render(request, 'index.html', context=data,)
+    else:
+        return redirect('start-page')
 
     
 
-
+@login_required
 def create_note(request):
     if request.method=='POST':
         name=request.POST.get('name')
@@ -26,16 +31,20 @@ def create_note(request):
         # name and description can be stored directly as values in the database but notecategory cannot be stored in the database directly as their value because it is relation field . so we have to pass the object to store value 
         
         Note.objects.create(name=name, description= description,notecategory=note_category_object)
+        return redirect('home')
         
     notecategory_obj=NoteCategory.objects.all()
     note_category={'notecategory':notecategory_obj}
     return render(request,'create_note.html',context=note_category)
 
+
+@login_required
 def create_note_category(request):
     if request.method=='POST':
         form=NoteCategoryForm(request.POST)
         if form.is_valid():
             form.save()
+            return redirect('home')
         else:
             return render(request,'create_note_category',context={'form':form})
      
@@ -43,6 +52,8 @@ def create_note_category(request):
     data={'notecategory_form':note_category_form}
     return render(request,'create_note_category.html',context=data)
 
+
+@login_required
 def edit_note(request,pk):
     note_obj=Note.objects.get(id=pk)
     
@@ -69,6 +80,7 @@ def edit_note(request,pk):
     content={'notecategory':notecategory_obj,'note':note_obj}
     return render(request,'edit_note.html',context=content)
 
+@login_required
 def edit_note_category(request,pk):
     note_category_obj=NoteCategory.objects.get(id=pk)
     
@@ -86,6 +98,8 @@ def edit_note_category(request,pk):
     data={'notecategory':note_category_form}
     return render(request,'edit_notecategory.html',context=data)
 
+
+@login_required
 def delete_note_category(request,pk):
     note_category_obj=NoteCategory.objects.get(id=pk)
     
@@ -95,6 +109,7 @@ def delete_note_category(request,pk):
 
     return render(request,'delete.html')
 
+@login_required
 def delete_note(request,pk):
     note_obj=Note.objects.get(id=pk)
     note_obj.delete()
@@ -103,15 +118,42 @@ def delete_note(request,pk):
 def register_user(request):
     
     if request.method == 'POST':
-        form=UserRegisterForm(request.POST)
+        data=request.POST.copy()
+        password=request.POST.get('password')
+        hash_password=make_password(password)
+        data['password']=hash_password
+        form=UserForm(data)
         if form.is_valid():
             form.save()
-            return redirect('home')
+            return redirect('start-page')
+        else:
+            return render(request,'register.html',context={'form':form})
     
-    form=UserRegisterForm()
+    form=UserForm()
     data={'form':form}
     return render(request,'register.html',context=data)
+
+def user_login(request):
+    form=UserForm()
+    if request.method=='POST':
+        username=request.POST.get('username')
+        password=request.POST.get('password')
+        user=authenticate(username=username,password=password)
+        if user== None:
+            return render(request,'login.html',context={'form':form,'error':'Invalid username and password'})
+        else:
+            login(request,user)
+            return redirect('home')
     
+    data={'form':form}
+    return render(request,'login.html',context=data)
     
+
+def log_out(request):
+    logout(request)
+    return redirect('start-page')
+
+def start_page(request):
+    return render(request,'home.html')
     
-    
+       

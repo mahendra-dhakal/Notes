@@ -10,12 +10,11 @@ class NoteCategoryForm(forms.ModelForm):
             'name':forms.TextInput(attrs={'class':"form-control"})
         }
 
-class UserRegisterForm(forms.ModelForm):
+class UserForm(forms.ModelForm):
     class Meta:
         model=User
-        fields=['username','email','password']
+        fields=['username','password']
         widgets={
             'username':forms.TextInput(attrs={'class':"form-control mt-2"}),
-            'email':forms.EmailInput(attrs={'class':"form-control mt-2"}),
             'password':forms.PasswordInput(attrs={'class':"form-control mt-2"})
         }
