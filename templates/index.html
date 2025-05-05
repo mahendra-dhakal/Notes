@@ -28,124 +28,126 @@
 </head>
 
 <body>
-  <div class="container card">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-      <h1 class="mb-0">Notes Dashboard</h1>
+  <div class="d-flex justify-content-between align-items-start mb-4">
+    <h1 class="mb-0">Notes Dashboard</h1>
+    <div class="d-flex flex-column align-items-end">
+      <span class="badge bg-secondary fs-5 px-3 py-2 mb-2">User: {{ request.user.username }}</span>
       <!-- Logout Button -->
       <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#logoutModal">
         Log Out
       </button>
     </div>
+  </div>
 
-    <!-- Logout Modal -->
-    <div class="modal fade" id="logoutModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-      aria-labelledby="logoutModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5" id="logoutModalLabel">Log Out</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            Are you sure you want to log out?
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-            <a href="{% url 'logout' %}"><button type="button" class="btn btn-primary">Yes</button></a>
-          </div>
+  <!-- Logout Modal -->
+  <div class="modal fade" id="logoutModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="logoutModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="logoutModalLabel">Log Out</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          Are you sure you want to log out?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <a href="{% url 'logout' %}"><button type="button" class="btn btn-primary">Yes</button></a>
         </div>
       </div>
     </div>
+  </div>
 
-    <!-- Tabs -->
-    <ul class="nav nav-tabs mt-3" id="myTab" role="tablist">
-      <li class="nav-item" role="presentation">
-        <button class="nav-link active" id="notes-tab" data-bs-toggle="tab" data-bs-target="#notes" type="button"
-          role="tab">Notes</button>
-      </li>
-      <li class="nav-item" role="presentation">
-        <button class="nav-link" id="categories-tab" data-bs-toggle="tab" data-bs-target="#categories" type="button"
-          role="tab">Note Categories</button>
-      </li>
-    </ul>
+  <!-- Tabs -->
+  <ul class="nav nav-tabs mt-3" id="myTab" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active" id="notes-tab" data-bs-toggle="tab" data-bs-target="#notes" type="button"
+        role="tab">Notes</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="categories-tab" data-bs-toggle="tab" data-bs-target="#categories" type="button"
+        role="tab">Note Categories</button>
+    </li>
+  </ul>
 
-    <div class="tab-content" id="myTabContent">
-      <!-- Notes Tab -->
-      <div class="tab-pane fade show active pt-4" id="notes" role="tabpanel">
-        <a href="{% url 'create-note' %}" class="btn btn-primary mb-3">+ Create Note</a>
-        <table class="table table-striped table-hover">
-          <thead class="table-light">
-            <tr>
-              <th>ID</th>
-              <th>Name</th>
-              <th>Description</th>
-              <th>Category</th>
-              <th colspan="2" class="text-center">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for i in notes %}
-            <tr>
-              <td>{{ i.id }}</td>
-              <td>{{ i.name }}</td>
-              <td>{{ i.description }}</td>
-              <td>{{ i.notecategory.name }}</td>
-              <td class="text-center">
-                <a href="{% url 'edit-note' pk=i.id %}" class="btn btn-warning btn-sm">Edit</a>
-              </td>
-              <td class="text-center">
-                <!-- Delete Trigger -->
-                <button class="btn btn-danger btn-sm" data-bs-toggle="modal"
-                  data-bs-target="#deleteNoteModal{{ i.id }}">Delete</button>
+  <div class="tab-content" id="myTabContent">
+    <!-- Notes Tab -->
+    <div class="tab-pane fade show active pt-4" id="notes" role="tabpanel">
+      <a href="{% url 'create-note' %}" class="btn btn-primary mb-3">+ Create Note</a>
+      <table class="table table-striped table-hover">
+        <thead class="table-light">
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Category</th>
+            <th colspan="2" class="text-center">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for i in notes %}
+          <tr>
+            <td>{{ i.id }}</td>
+            <td>{{ i.name }}</td>
+            <td>{{ i.description }}</td>
+            <td>{{ i.notecategory.name }}</td>
+            <td class="text-center">
+              <a href="{% url 'edit-note' pk=i.id %}" class="btn btn-warning btn-sm">Edit</a>
+            </td>
+            <td class="text-center">
+              <!-- Delete Trigger -->
+              <button class="btn btn-danger btn-sm" data-bs-toggle="modal"
+                data-bs-target="#deleteNoteModal{{ i.id }}">Delete</button>
 
-                <!-- Delete Modal -->
-                <div class="modal fade" id="deleteNoteModal{{ i.id }}" tabindex="-1"
-                  aria-labelledby="deleteNoteModalLabel{{ i.id }}" aria-hidden="true">
-                  <div class="modal-dialog">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h5 class="modal-title" id="deleteNoteModalLabel{{ i.id }}">Delete Note</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                      </div>
-                      <div class="modal-body">Are you sure you want to delete this note?</div>
-                      <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <a href="{% url 'delete-note' pk=i.id %}" class="btn btn-danger">Delete</a>
-                      </div>
+              <!-- Delete Modal -->
+              <div class="modal fade" id="deleteNoteModal{{ i.id }}" tabindex="-1"
+                aria-labelledby="deleteNoteModalLabel{{ i.id }}" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="deleteNoteModalLabel{{ i.id }}">Delete Note</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">Are you sure you want to delete this note?</div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                      <a href="{% url 'delete-note' pk=i.id %}" class="btn btn-danger">Delete</a>
                     </div>
                   </div>
                 </div>
-              </td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
-
-      <!-- Categories Tab -->
-      <div class="tab-pane fade pt-4" id="categories" role="tabpanel">
-        <a href="{% url 'create-note-category' %}" class="btn btn-primary mb-3">+ Create Note Category</a>
-        <table class="table table-striped table-hover">
-          <thead class="table-light">
-            <tr>
-              <th>ID</th>
-              <th>Name</th>
-              <th colspan="2" class="text-center">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for i in note_categories %}
-            <tr>
-              <td>{{ i.id }}</td>
-              <td>{{ i.name }}</td>
-              <td class="text-center">
-                <a href="{% url 'edit-note-category' pk=i.id %}" class="btn btn-warning btn-sm">Edit</a>
-              </td>
-              <td class="text-center">
-
-                <a href="{% url 'delete-notecategory' pk=i.id %}" class="btn btn-danger">Delete</a>
-      </div>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
     </div>
+
+    <!-- Categories Tab -->
+    <div class="tab-pane fade pt-4" id="categories" role="tabpanel">
+      <a href="{% url 'create-note-category' %}" class="btn btn-primary mb-3">+ Create Note Category</a>
+      <table class="table table-striped table-hover">
+        <thead class="table-light">
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th colspan="2" class="text-center">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for i in note_categories %}
+          <tr>
+            <td>{{ i.id }}</td>
+            <td>{{ i.name }}</td>
+            <td class="text-center">
+              <a href="{% url 'edit-note-category' pk=i.id %}" class="btn btn-warning btn-sm">Edit</a>
+            </td>
+            <td class="text-center">
+
+              <a href="{% url 'delete-notecategory' pk=i.id %}" class="btn btn-danger">Delete</a>
+    </div>
+  </div>
   </div>
   </div>
   </td>

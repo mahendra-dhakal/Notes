@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 class NoteCategoryForm(forms.ModelForm):
     class Meta:
         model=NoteCategory
-        fields='__all__'
+        fields=['name']
         widgets={
             'name':forms.TextInput(attrs={'class':"form-control"})
         }
